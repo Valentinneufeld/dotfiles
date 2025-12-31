@@ -1,8 +1,3 @@
--- Indentation keymaps
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=3")
-vim.cmd("set softtabstop=3")
-vim.cmd("set shiftwidth=3")
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
@@ -26,9 +21,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- ========================
--- Load Plugins
--- ========================
+require("vim-options")
 require("lazy").setup("plugins", {
   checker = { enabled = true },
 })
