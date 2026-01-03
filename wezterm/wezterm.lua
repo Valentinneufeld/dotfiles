@@ -1,15 +1,14 @@
 -- ----------------------------
--- WezTerm Configuration
+-- WezTerm Full TMUX-Style Configuration
 -- ----------------------------
 local wezterm = require("wezterm")
 
--- Font with fallback
+-- Font helper
 local function font_with_fallback(name, params)
 	local names = { name, "Apple Color Emoji", "azuki_font" }
 	return wezterm.font_with_fallback(names, params)
 end
 
--- Main font
 local font_name = "JetBrainsMono Nerd Font"
 
 return {
@@ -42,11 +41,8 @@ return {
 	-- Animation
 	animation_fps = 30,
 
-	-- Wayland
+	-- Wayland (disabled on Windows)
 	enable_wayland = false,
-
-	-- Keybindings (default for Tmux, no remaps)
-	-- disable_default_key_bindings = false,
 
 	-- Colorscheme: Night / dark theme
 	bold_brightens_ansi_colors = true,
@@ -78,12 +74,41 @@ return {
 	enable_tab_bar = true,
 	hide_tab_bar_if_only_one_tab = true,
 	show_tab_index_in_tab_bar = false,
-	tab_bar_at_bottom = true, -- <- Status bar at bottom
+	tab_bar_at_bottom = true, -- Status bar at bottom
 
 	-- General window settings
 	automatically_reload_config = true,
 	inactive_pane_hsb = { saturation = 1.0, brightness = 1.0 },
-	window_background_opacity = 1.0,
+	window_background_opacity = 0.97,
 	window_close_confirmation = "NeverPrompt",
-	window_frame = { active_titlebar_bg = "#090909", font = font_with_fallback(font_name, { bold = true }) },
+	window_frame = {
+		active_titlebar_bg = "#090909",
+		font = font_with_fallback(font_name, { bold = true }),
+	},
+
+	-- Leader key (tmux-style Ctrl+b)
+	leader = { key = "b", mods = "CTRL", timeout_milliseconds = 1000 },
+
+	-- Keybindings
+	keys = {
+		-- Pane management
+		{ key = "%", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = '"', mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+		{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
+		{ key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Down") },
+		{ key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Up") },
+		{ key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Right") },
+		{ key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
+
+		--	 Tab management
+		{ key = "c", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+		{ key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
+		{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+
+		-- Resize panes like tmux (Shift + Leader + h/j/k/l)
+		{ key = "H", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Left", 5 }) },
+		{ key = "J", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Down", 5 }) },
+		{ key = "K", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Up", 5 }) },
+		{ key = "L", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Right", 5 }) },
+	},
 }
