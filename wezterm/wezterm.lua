@@ -1,0 +1,89 @@
+-- ----------------------------
+-- WezTerm Configuration
+-- ----------------------------
+local wezterm = require("wezterm")
+
+-- Font with fallback
+local function font_with_fallback(name, params)
+	local names = { name, "Apple Color Emoji", "azuki_font" }
+	return wezterm.font_with_fallback(names, params)
+end
+
+-- Main font
+local font_name = "JetBrainsMono Nerd Font"
+
+return {
+	-- Default shell / domain
+	default_domain = "WSL:Ubuntu-24.04",
+
+	-- Rendering
+	front_end = "OpenGL",
+
+	-- Font settings
+	font = font_with_fallback(font_name),
+	font_rules = {
+		{ italic = true, font = font_with_fallback(font_name, { italic = true }) },
+		{ italic = true, intensity = "Bold", font = font_with_fallback(font_name, { italic = true, bold = true }) },
+		{ intensity = "Bold", font = font_with_fallback(font_name, { bold = true }) },
+	},
+	font_size = 11,
+	line_height = 1.0,
+
+	-- Cursor
+	default_cursor_style = "BlinkingBlock",
+
+	-- Scrollback
+	scrollback_lines = 10000,
+
+	-- Audible bell
+	audible_bell = "Disabled",
+	warn_about_missing_glyphs = false,
+
+	-- Animation
+	animation_fps = 30,
+
+	-- Wayland
+	enable_wayland = false,
+
+	-- Keybindings (default for Tmux, no remaps)
+	-- disable_default_key_bindings = false,
+
+	-- Colorscheme: Night / dark theme
+	bold_brightens_ansi_colors = true,
+	colors = {
+		foreground = "#CBE0F0",
+		background = "#011423",
+		cursor_bg = "#47FF9C",
+		cursor_border = "#47FF9C",
+		cursor_fg = "#011423",
+		selection_bg = "#033259",
+		selection_fg = "#CBE0F0",
+		split = "#090909",
+		ansi = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#0FC5ED", "#a277ff", "#24EAF7", "#24EAF7" },
+		brights = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#A277FF", "#a277ff", "#24EAF7", "#24EAF7" },
+		indexed = { [136] = "#edeff0" },
+		tab_bar = {
+			active_tab = { bg_color = "#0c0e0f", fg_color = "#edeff0", italic = true },
+			inactive_tab = { bg_color = "#090909", fg_color = "#0c0e0f" },
+			inactive_tab_hover = { bg_color = "#151515", fg_color = "#090909" },
+			new_tab = { bg_color = "#151515", fg_color = "#090909" },
+			new_tab_hover = { bg_color = "#6791c9", fg_color = "#090909" },
+		},
+	},
+
+	-- Window padding
+	window_padding = { left = 0, right = 0, top = 0, bottom = 0 },
+
+	-- Tab bar
+	enable_tab_bar = true,
+	hide_tab_bar_if_only_one_tab = true,
+	show_tab_index_in_tab_bar = false,
+	tab_bar_at_bottom = true, -- <- Status bar at bottom
+
+	-- General window settings
+	automatically_reload_config = true,
+	inactive_pane_hsb = { saturation = 1.0, brightness = 1.0 },
+	window_background_opacity = 1.0,
+	window_close_confirmation = "NeverPrompt",
+	window_frame = { active_titlebar_bg = "#090909", font = font_with_fallback(font_name, { bold = true }) },
+}
