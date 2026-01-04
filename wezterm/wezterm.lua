@@ -26,7 +26,7 @@ return {
 		{ intensity = "Bold", font = font_with_fallback(font_name, { bold = true }) },
 	},
 	font_size = 11,
-	line_height = 1.0,
+	line_height = 1.1,
 
 	-- Cursor
 	default_cursor_style = "BlinkingBlock",
@@ -54,13 +54,13 @@ return {
 		cursor_fg = "#011423",
 		selection_bg = "#033259",
 		selection_fg = "#CBE0F0",
-		split = "#090909",
+		split = "#276c7b",
 		ansi = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#0FC5ED", "#a277ff", "#24EAF7", "#24EAF7" },
 		brights = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#A277FF", "#a277ff", "#24EAF7", "#24EAF7" },
 		indexed = { [136] = "#edeff0" },
 		tab_bar = {
-			active_tab = { bg_color = "#1a1a1a", fg_color = "#edeff0", italic = true },
-			inactive_tab = { bg_color = "#2c2c2c", fg_color = "#888888" },
+			active_tab = { bg_color = "#2c2c2c", fg_color = "#edeff0", italic = true },
+			inactive_tab = { bg_color = "#0b1622", fg_color = "#6f7f8f" },
 			inactive_tab_hover = { bg_color = "#444444", fg_color = "#ffffff" },
 			new_tab = { bg_color = "#3c3c3c", fg_color = "#edeff0" },
 			new_tab_hover = { bg_color = "#6791c9", fg_color = "#090909" },
@@ -86,19 +86,26 @@ return {
 		font = font_with_fallback(font_name, { bold = true }),
 	},
 
+	-- disable_default_key_bindings = true,
+
 	-- Leader key (tmux-style Ctrl+b)
-	leader = { key = "b", mods = "CTRL", timeout_milliseconds = 1000 },
+	leader = { key = "b", mods = "CTRL", timeout_milliseconds = 5000 },
 
 	-- Keybindings
 	keys = {
 		-- Pane management
-		{ key = "%", mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-		{ key = '"', mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
+
+		{ key = "%", mods = "LEADER|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = '"', mods = "LEADER|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 		{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
 		{ key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Down") },
 		{ key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Up") },
 		{ key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Right") },
 		{ key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
+
+		-- Close pane
+		{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = false }) },
+		{ key = "X", mods = "LEADER|SHIFT", action = wezterm.action.CloseCurrentTab({ confirm = false }) },
 
 		--	 Tab management
 		{ key = "c", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
@@ -106,9 +113,9 @@ return {
 		{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
 
 		-- Resize panes like tmux (Shift + Leader + h/j/k/l)
-		{ key = "H", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Left", 5 }) },
-		{ key = "J", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Down", 5 }) },
-		{ key = "K", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Up", 5 }) },
-		{ key = "L", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Right", 5 }) },
+		{ key = "H", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Left", 25 }) },
+		{ key = "J", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Down", 25 }) },
+		{ key = "K", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Up", 20 }) },
+		{ key = "L", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Right", 20 }) },
 	},
 }
