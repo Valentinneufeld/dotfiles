@@ -134,3 +134,10 @@ export NVM_DIR="$HOME/.nvm"
 # Automatically redraw prompt on window resize
 TRAPWINCH() { zle && zle reset-prompt }
 
+######################################
+# Start ssh-agent if not running
+######################################
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+  eval "$(ssh-agent -s)" >/dev/null
+fi
+
