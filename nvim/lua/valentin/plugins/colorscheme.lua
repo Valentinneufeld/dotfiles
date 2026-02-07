@@ -4,15 +4,16 @@ return {
   config = function()
     local transparent = false -- set to true if you would like to enable transparency
 
-    local bg = "#011628"
-    local bg_dark = "#011423"
-    local bg_highlight = "#143652"
-    local bg_search = "#0A64AC"
-    local bg_visual = "#275378"
-    local fg = "#CBE0F0"
-    local fg_dark = "#B4D0E9"
-    local fg_gutter = "#627E97"
-    local border = "#547998"
+    -- Desert Night (earthy tones matching WezTerm)
+    local bg = "#1a1410"
+    local bg_dark = "#14100c"
+    local bg_highlight = "#3a2e22"
+    local bg_search = "#c8a656"
+    local bg_visual = "#3a2e22"
+    local fg = "#d4c4a8"
+    local fg_dark = "#c4b498"
+    local fg_gutter = "#5a4a3a"
+    local border = "#4a3c2e"
 
     require("tokyonight").setup({
       style = "night",
@@ -37,6 +38,27 @@ return {
         colors.fg_float = fg
         colors.fg_gutter = fg_gutter
         colors.fg_sidebar = fg_dark
+
+        -- Syntax/accent colors (Desert Night)
+        colors.blue = "#6a8fa3"
+        colors.blue0 = "#5a7a8a"
+        colors.blue1 = "#6a8fa3"
+        colors.blue2 = "#4a3c2e"
+        colors.blue5 = "#7a9fb3"
+        colors.blue6 = "#6a9a8a"
+        colors.blue7 = "#4a3c2e"
+        colors.cyan = "#6a9a8a"
+        colors.purple = "#a07a8f"
+        colors.magenta = "#a07a8f"
+        colors.magenta2 = "#96707e"
+        colors.orange = "#c8a656"
+        colors.yellow = "#d4a24e"
+        colors.green = "#7d9a5a"
+        colors.green1 = "#8aad6a"
+        colors.green2 = "#7d9a5a"
+        colors.red = "#b35544"
+        colors.red1 = "#c46a5a"
+        colors.teal = "#6a9a8a"
       end,
     })
 

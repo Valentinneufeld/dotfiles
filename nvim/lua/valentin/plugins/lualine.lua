@@ -5,15 +5,16 @@ return {
     local lualine = require("lualine")
     local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
+    -- Desert Night (earthy tones matching WezTerm)
     local colors = {
-      blue = "#65D1FF",
-      green = "#3EFFDC",
-      violet = "#FF61EF",
-      yellow = "#FFDA7B",
-      red = "#FF4A4A",
-      fg = "#c3ccdc",
-      bg = "#112638",
-      inactive_bg = "#2c3043",
+      blue = "#6a8fa3",
+      green = "#7d9a5a",
+      violet = "#a07a8f",
+      yellow = "#c8a656",
+      red = "#b35544",
+      fg = "#d4c4a8",
+      bg = "#14100c",
+      inactive_bg = "#2e2418",
     }
 
     local my_lualine_theme = {
