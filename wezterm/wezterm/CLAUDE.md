@@ -50,6 +50,8 @@ Leader: `Ctrl+b`
 | `Leader + z` | Pane Zoom |
 | `Leader + %` | Horizontal splitten |
 | `Leader + "` | Vertikal splitten |
+| `Leader + {` | Panes gegen Uhrzeigersinn rotieren |
+| `Leader + }` | Panes im Uhrzeigersinn rotieren |
 | `Leader + x` | Pane schließen |
 | `Leader + X` | Tab schließen |
 

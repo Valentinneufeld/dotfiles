@@ -173,6 +173,10 @@ return {
 		-- Pane cycling
 		{ key = "o", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Next") },
 
+		-- Pane rotation (tmux-style { and })
+		{ key = "{", mods = "LEADER", action = wezterm.action.RotatePanes "CounterClockwise" },
+		{ key = "}", mods = "LEADER", action = wezterm.action.RotatePanes "Clockwise" },
+
 		-- Pane selection with labels
 		{ key = "q", mods = "LEADER", action = wezterm.action.PaneSelect },
 
