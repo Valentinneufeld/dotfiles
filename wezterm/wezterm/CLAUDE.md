@@ -39,7 +39,8 @@ Leader: `Ctrl+b`
 | `Leader + s` | QuickSelect (Text mit Labels auswählen) |
 | `Leader + u` | URL auswählen und öffnen |
 | `Leader + P` | Pane Mode aktivieren |
-| `Leader + 0-9` | Tab N aktivieren |
+| `Leader + 1-9` | Tab N aktivieren (1-basiert) |
+| `Leader + 0` | Letzter Tab |
 | `Leader + w` | Tab Navigator |
 | `Leader + ,` | Tab umbenennen |
 | `Leader + o` | Panes durchschalten |
