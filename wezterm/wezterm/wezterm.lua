@@ -22,8 +22,8 @@ wezterm.on("update-status", function(window, pane)
 	end
 
 	window:set_left_status(wezterm.format({
-		{ Foreground = { Color = "#011423" } },
-		{ Background = { Color = "#47FF9C" } },
+		{ Foreground = { Color = "#1a1410" } },
+		{ Background = { Color = "#c8a656" } },
 		{ Text = status },
 	}))
 	-- Clear right status (removes stuck copy mode indicator)
@@ -63,26 +63,26 @@ return {
 	-- Wayland (disabled on Windows)
 	enable_wayland = false,
 
-	-- Colorscheme: Night / dark theme
+	-- Colorscheme: Desert Night (earthy tones)
 	bold_brightens_ansi_colors = true,
 	colors = {
-		foreground = "#CBE0F0",
-		background = "#011423",
-		cursor_bg = "#47FF9C",
-		cursor_border = "#47FF9C",
-		cursor_fg = "#011423",
-		selection_bg = "#033259",
-		selection_fg = "#CBE0F0",
-		split = "#276c7b",
-		ansi = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#0FC5ED", "#a277ff", "#24EAF7", "#24EAF7" },
-		brights = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#A277FF", "#a277ff", "#24EAF7", "#24EAF7" },
+		foreground = "#d4c4a8",
+		background = "#1a1410",
+		cursor_bg = "#c8a656",
+		cursor_border = "#c8a656",
+		cursor_fg = "#1a1410",
+		selection_bg = "#3a2e22",
+		selection_fg = "#d4c4a8",
+		split = "#4a3c2e",
+		ansi = { "#3a2e22", "#b35544", "#7d9a5a", "#d4a24e", "#6a8fa3", "#a07a8f", "#6a9a8a", "#d4c4a8" },
+		brights = { "#5a4a3a", "#c46a5a", "#8aad6a", "#e0b65e", "#7aa0b4", "#b08a9f", "#7aaa9a", "#e8dcc8" },
 		indexed = { [136] = "#edeff0" },
 		tab_bar = {
-			active_tab = { bg_color = "#2c2c2c", fg_color = "#edeff0", italic = true },
-			inactive_tab = { bg_color = "#0b1622", fg_color = "#6f7f8f" },
-			inactive_tab_hover = { bg_color = "#444444", fg_color = "#ffffff" },
-			new_tab = { bg_color = "#3c3c3c", fg_color = "#edeff0" },
-			new_tab_hover = { bg_color = "#6791c9", fg_color = "#090909" },
+			active_tab = { bg_color = "#2e2418", fg_color = "#d4c4a8", italic = true },
+			inactive_tab = { bg_color = "#1a1410", fg_color = "#7a6a5a" },
+			inactive_tab_hover = { bg_color = "#3a2e22", fg_color = "#d4c4a8" },
+			new_tab = { bg_color = "#2e2418", fg_color = "#d4c4a8" },
+			new_tab_hover = { bg_color = "#c8a656", fg_color = "#1a1410" },
 		},
 	},
 

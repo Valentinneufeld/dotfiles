@@ -14,6 +14,18 @@
 - **QuickSelect**: https://wezterm.org/config/lua/keyassignment/QuickSelect.html
 - **Key Tables**: https://wezterm.org/config/key-tables.html
 
+## Colorscheme
+
+**Desert Night** — Erdige Farbtöne mit warmen Sand- und Goldakzenten.
+
+| Element | Farbe |
+|---------|-------|
+| Background | `#1a1410` (tiefes Braun-Schwarz) |
+| Foreground | `#d4c4a8` (warmer Sand) |
+| Cursor/Akzent | `#c8a656` (gedämpftes Gold) |
+| Split | `#4a3c2e` (dunkles Leder) |
+| Leader-Indikator | Gold auf Braun |
+
 ## Aktuelle Keybindings (tmux-style)
 
 Leader: `Ctrl+b`
