@@ -1,5 +1,7 @@
 # WezTerm Konfiguration
 
+> **Research-Notes:** Siehe `WEZTERM-RESEARCH.md` für detaillierte API-Referenz, Implementierungsdetails und Design-Entscheidungen.
+
 ## Dokumentation Quellen
 
 - **Key Bindings**: https://wezterm.org/config/keys.html
