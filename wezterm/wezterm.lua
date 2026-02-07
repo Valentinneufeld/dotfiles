@@ -11,6 +11,21 @@ end
 
 local font_name = "JetBrainsMono Nerd Font"
 
+-- Leader key indicator in status bar
+wezterm.on("update-status", function(window, pane)
+	local leader = ""
+	if window:leader_is_active() then
+		leader = " LEADER "
+	end
+	window:set_left_status(wezterm.format({
+		{ Foreground = { Color = "#011423" } },
+		{ Background = { Color = "#47FF9C" } },
+		{ Text = leader },
+	}))
+	-- Clear right status (removes stuck copy mode indicator)
+	window:set_right_status("")
+end)
+
 return {
 	-- Default shell / domain
 	default_domain = "WSL:Ubuntu-24.04",
@@ -72,7 +87,7 @@ return {
 
 	-- Tab bar
 	enable_tab_bar = true,
-	hide_tab_bar_if_only_one_tab = true,
+	hide_tab_bar_if_only_one_tab = false,
 	show_tab_index_in_tab_bar = false,
 	tab_bar_at_bottom = true, -- Status bar at bottom
 
@@ -93,8 +108,46 @@ return {
 
 	-- Keybindings
 	keys = {
-		-- Pane management
+		-- Copy Mode (tmux-style)
+		{ key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
+		{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("Clipboard") },
 
+		-- Direct tab switching (Leader + 0-9)
+		{ key = "0", mods = "LEADER", action = wezterm.action.ActivateTab(0) },
+		{ key = "1", mods = "LEADER", action = wezterm.action.ActivateTab(1) },
+		{ key = "2", mods = "LEADER", action = wezterm.action.ActivateTab(2) },
+		{ key = "3", mods = "LEADER", action = wezterm.action.ActivateTab(3) },
+		{ key = "4", mods = "LEADER", action = wezterm.action.ActivateTab(4) },
+		{ key = "5", mods = "LEADER", action = wezterm.action.ActivateTab(5) },
+		{ key = "6", mods = "LEADER", action = wezterm.action.ActivateTab(6) },
+		{ key = "7", mods = "LEADER", action = wezterm.action.ActivateTab(7) },
+		{ key = "8", mods = "LEADER", action = wezterm.action.ActivateTab(8) },
+		{ key = "9", mods = "LEADER", action = wezterm.action.ActivateTab(9) },
+
+		-- Tab navigator (tmux window list)
+		{ key = "w", mods = "LEADER", action = wezterm.action.ShowTabNavigator },
+
+		-- Rename tab
+		{
+			key = ",",
+			mods = "LEADER",
+			action = wezterm.action.PromptInputLine({
+				description = "Enter new name for tab",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line then
+						window:active_tab():set_title(line)
+					end
+				end),
+			}),
+		},
+
+		-- Pane cycling
+		{ key = "o", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Next") },
+
+		-- Pane selection with labels
+		{ key = "q", mods = "LEADER", action = wezterm.action.PaneSelect },
+
+		-- Pane management
 		{ key = "%", mods = "LEADER|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 		{ key = '"', mods = "LEADER|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 		{ key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
@@ -107,7 +160,7 @@ return {
 		{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = false }) },
 		{ key = "X", mods = "LEADER|SHIFT", action = wezterm.action.CloseCurrentTab({ confirm = false }) },
 
-		--	 Tab management
+		-- Tab management
 		{ key = "c", mods = "LEADER", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
 		{ key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
 		{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
@@ -117,5 +170,47 @@ return {
 		{ key = "J", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Down", 35 }) },
 		{ key = "K", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Up", 30 }) },
 		{ key = "L", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Right", 30 }) },
+	},
+	key_tables = {
+		copy_mode = {
+			-- Navigation
+			{ key = "h", action = wezterm.action.CopyMode("MoveLeft") },
+			{ key = "j", action = wezterm.action.CopyMode("MoveDown") },
+			{ key = "k", action = wezterm.action.CopyMode("MoveUp") },
+			{ key = "l", action = wezterm.action.CopyMode("MoveRight") },
+
+			-- Word movement
+			{ key = "w", action = wezterm.action.CopyMode("MoveForwardWord") },
+			{ key = "b", action = wezterm.action.CopyMode("MoveBackwardWord") },
+			{ key = "e", action = wezterm.action.CopyMode("MoveForwardWordEnd") },
+
+			-- Line movement
+			{ key = "0", action = wezterm.action.CopyMode("MoveToStartOfLine") },
+			{ key = "$", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToEndOfLineContent") },
+			{ key = "^", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToStartOfLineContent") },
+
+			-- Page movement
+			{ key = "g", action = wezterm.action.CopyMode("MoveToScrollbackTop") },
+			{ key = "G", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToScrollbackBottom") },
+
+			-- Selection
+			{ key = "v", action = wezterm.action.CopyMode({ SetSelectionMode = "Cell" }) },
+			{ key = "V", mods = "SHIFT", action = wezterm.action.CopyMode({ SetSelectionMode = "Line" }) },
+
+			-- Search
+			{ key = "/", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
+			{ key = "n", action = wezterm.action.CopyMode("NextMatch") },
+			{ key = "N", mods = "SHIFT", action = wezterm.action.CopyMode("PriorMatch") },
+
+			-- Copy and exit
+			{ key = "y", action = wezterm.action.Multiple({
+				wezterm.action.CopyTo("ClipboardAndPrimarySelection"),
+				wezterm.action.CopyMode("Close"),
+			}) },
+
+			-- Exit copy mode
+			{ key = "q", action = wezterm.action.CopyMode("Close") },
+			{ key = "Escape", action = wezterm.action.CopyMode("Close") },
+		},
 	},
 }
