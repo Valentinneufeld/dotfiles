@@ -161,8 +161,26 @@ return {
 		{ key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
 		{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("Clipboard") },
 
+		-- Direct search (skip copy mode)
+		{ key = "/", mods = "LEADER|SHIFT", action = wezterm.action.Search("CurrentSelectionOrEmptyString") },
+
 		-- QuickSelect (vim-easymotion style)
 		{ key = "S", mods = "LEADER|SHIFT", action = wezterm.action.QuickSelect },
+
+		-- QuickSelect Shell-Befehle
+		{
+			key = "b",
+			mods = "LEADER",
+			action = wezterm.action.QuickSelectArgs({
+				label = "command",
+				patterns = { "[❯$#] .+$" },
+				action = wezterm.action_callback(function(window, pane)
+					local text = window:get_selection_text_for_pane(pane)
+					text = text:gsub("^[❯$#] ", "")
+					window:copy_to_clipboard(text)
+				end),
+			}),
+		},
 
 		-- URL QuickSelect and open
 		{

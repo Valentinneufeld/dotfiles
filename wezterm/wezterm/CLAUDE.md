@@ -70,8 +70,10 @@ Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 | Tasten | Aktion |
 |--------|--------|
 | `Leader + [` | Copy Mode |
+| `Leader + /` | Direkt Search Mode (ohne Copy Mode) |
 | `Leader + ]` | Paste |
 | `Leader + S` | QuickSelect (Text mit Labels auswählen) |
+| `Leader + b` | QuickSelect Shell-Befehle (nach `❯`, `$`, `#`) |
 | `Leader + u` | URL auswählen und öffnen |
 | `Leader + s` | Workspace-Liste (fuzzy) |
 | `Leader + $` | Workspace umbenennen/erstellen |

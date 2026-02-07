@@ -23,8 +23,10 @@ Die Statusleiste zeigt den aktiven Modus an: "LEADER", "PANE_MODE", etc.
 
 | Keys | Action |
 |------|--------|
-| `Leader + s` | QuickSelect - Text mit Labels auswählen und kopieren |
+| `Leader + S` | QuickSelect - Text mit Labels auswählen und kopieren |
+| `Leader + b` | QuickSelect Shell-Befehle (nach `❯`, `$`, `#`) |
 | `Leader + u` | URL auswählen und direkt im Browser öffnen |
+| `Leader + /` | Direkt Search Mode (ohne Copy Mode) |
 
 **Automatisch erkannte Patterns:** Git SHAs, IP-Adressen, URLs, Pfade, E-Mail-Adressen
 

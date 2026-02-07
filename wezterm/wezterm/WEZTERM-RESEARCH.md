@@ -183,7 +183,7 @@ Werte in Pixel. Benutzer bevorzugt symmetrisches horizontales Padding.
 
 ## Zukünftige Ideen
 
-- [ ] Search Mode mit `/` außerhalb Copy Mode
+- [x] Search Mode mit `/` außerhalb Copy Mode
 - [ ] Workspace/Session Management
 - [ ] Custom Tab Titles mit Prozessinfo
 - [ ] Hyperlink-Regeln für lokale Dateipfade
