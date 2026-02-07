@@ -13,6 +13,27 @@
 - **PaneSelect**: https://wezterm.org/config/lua/keyassignment/PaneSelect.html
 - **QuickSelect**: https://wezterm.org/config/lua/keyassignment/QuickSelect.html
 - **Key Tables**: https://wezterm.org/config/key-tables.html
+- **RotatePanes**: https://wezterm.org/config/lua/keyassignment/RotatePanes.html
+- **MoveTab**: https://wezterm.org/config/lua/keyassignment/MoveTab.html
+- **SwitchToWorkspace**: https://wezterm.org/config/lua/keyassignment/SwitchToWorkspace.html
+- **SwitchWorkspaceRelative**: https://wezterm.org/config/lua/keyassignment/SwitchWorkspaceRelative.html
+- **ShowLauncherArgs**: https://wezterm.org/config/lua/keyassignment/ShowLauncherArgs.html
+- **EditPattern**: https://wezterm.org/config/lua/keyassignment/CopyMode/EditPattern.html
+- **format-tab-title**: https://wezterm.org/config/lua/window-events/format-tab-title.html
+- **Scrollback/Search**: https://wezterm.org/scrollback.html
+
+## Allgemeine Einstellungen
+
+| Einstellung | Wert |
+|-------------|------|
+| Default Domain | `WSL:Ubuntu-24.04` |
+| Rendering | OpenGL |
+| Font | JetBrainsMono Nerd Font, Size 11, Line Height 1.1 |
+| Cursor | BlinkingBlock |
+| Scrollback | 10.000 Zeilen |
+| Bell | Deaktiviert |
+| Tab-Leiste | Oben, immer sichtbar |
+| QuickSelect Patterns | Git SHA (`[0-9a-f]{7,40}`), IP-Adressen |
 
 ## Colorscheme
 
@@ -23,12 +44,26 @@
 | Background | `#1a1410` (tiefes Braun-Schwarz) |
 | Foreground | `#d4c4a8` (warmer Sand) |
 | Cursor/Akzent | `#c8a656` (gedämpftes Gold) |
+| Selection | `#3a2e22` |
 | Split | `#4a3c2e` (dunkles Leder) |
-| Leader-Indikator | Gold auf Braun |
+| Tab-Bar BG | `#090909` (passend zum Fensterrahmen) |
+| Active Tab BG | `#1a1410` (verschmilzt mit Terminal) |
+| Inactive Tab | `#090909` mit gedämpfter Schrift `#7a6a5a` |
+
+Dasselbe Schema ist auch in Neovim (`~/.config/nvim/lua/valentin/plugins/colorscheme.lua` und `lualine.lua`) angewendet — TokyoNight als Base mit Desert Night Farben.
+
+## Status-Leiste
+
+- **Links:** Mode-Indikator (LEADER / COPY_MODE / PANE_MODE etc.) — Gold auf Braun
+- **Rechts:** Aktueller Workspace-Name — gedämpft (`#7a6a5a`)
+
+## Tab-Styling
+
+Tabs haben Powerline-Pfeile (NerdFont `pl_right_hard_divider` / `pl_left_hard_divider`) als Rahmen. Format: `[Index]: [Pane-Titel]` (1-basiert).
 
 ## Aktuelle Keybindings (tmux-style)
 
-Leader: `Ctrl+b`
+Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 
 ### Allgemein
 
@@ -36,18 +71,25 @@ Leader: `Ctrl+b`
 |--------|--------|
 | `Leader + [` | Copy Mode |
 | `Leader + ]` | Paste |
-| `Leader + s` | QuickSelect (Text mit Labels auswählen) |
+| `Leader + S` | QuickSelect (Text mit Labels auswählen) |
 | `Leader + u` | URL auswählen und öffnen |
+| `Leader + s` | Workspace-Liste (fuzzy) |
+| `Leader + $` | Workspace umbenennen/erstellen |
+| `Leader + (` / `)` | Vorheriger/nächster Workspace |
+| `Leader + .` | Tab verschieben (1-basiert) |
+| `Leader + f` | Tabs fuzzy-suchen |
+| `Leader + ?` | Keybindings anzeigen (fuzzy) |
 | `Leader + P` | Pane Mode aktivieren |
 | `Leader + 1-9` | Tab N aktivieren (1-basiert) |
 | `Leader + 0` | Letzter Tab |
 | `Leader + w` | Tab Navigator |
 | `Leader + ,` | Tab umbenennen |
 | `Leader + o` | Panes durchschalten |
-| `Leader + q` | Pane auswählen |
+| `Leader + q` | Pane auswählen (mit Labels) |
 | `Leader + c` | Neuer Tab |
 | `Leader + n/p` | Nächster/vorheriger Tab |
 | `Leader + h/j/k/l` | Pane-Navigation |
+| `Leader + H/J/K/L` | Pane-Resize (groß, 30-35 Einheiten) |
 | `Leader + z` | Pane Zoom |
 | `Leader + %` | Horizontal splitten |
 | `Leader + "` | Vertikal splitten |
@@ -62,27 +104,51 @@ Leader: `Ctrl+b`
 |--------|--------|
 | `h/j/k/l` | Navigation |
 | `w/b/e` | Wort-Navigation |
-| `0/$` | Zeilenanfang/-ende |
+| `0` / `$` / `^` | Zeilenanfang / -ende / erstes Zeichen |
 | `g/G` | Scrollback Anfang/Ende |
+| `H/M/L` | Viewport Top/Mitte/Bottom |
 | `Ctrl+d/u` | Halbe Seite scrollen |
 | `Ctrl+f/b` | Ganze Seite scrollen |
+| `f/F` + Zeichen | Springe zum Zeichen vorwärts/rückwärts (Zeile) |
+| `t/T` + Zeichen | Springe vor das Zeichen vorwärts/rückwärts (Zeile) |
+| `;` / `,` | Jump wiederholen / umkehren |
 | `v` | Auswahl starten |
 | `V` | Zeilen-Auswahl |
 | `Ctrl+v` | Block-Auswahl |
 | `z` | Semantic Zone Auswahl |
-| `/` | Suche starten |
-| `n/N` | Nächster/vorheriger Treffer |
+| `s` oder `/` | Suche starten |
+| `n/N` | Nächster/vorheriger Treffer (im Copy Mode) |
 | `y` | Kopieren und beenden |
 | `q/Esc` | Beenden |
+
+### Search Mode (aus Copy Mode heraus)
+
+| Tasten | Aktion |
+|--------|--------|
+| Text tippen | Suchfeld füllen |
+| `Enter` | Suche bestätigen, zurück zum Copy Mode |
+| `Ctrl+n` | Nächster Treffer |
+| `Ctrl+p` | Vorheriger Treffer |
+| `Ctrl+r` | Suchmodus wechseln (case-sensitive/insensitive/regex) |
+| `Ctrl+u` | Suchfeld leeren |
+| `Esc` | Suche beenden |
+
+**Such-Workflow:** `Leader + [` → `s` → Suchbegriff → `Enter` → `n/N` zum Springen → `v` Auswahl → `y` Kopieren
 
 ### Pane Mode (wiederholbar ohne Leader)
 
 | Tasten | Aktion |
 |--------|--------|
 | `h/j/k/l` | Pane wechseln |
-| `H/J/K/L` | Pane resize |
+| `H/J/K/L` | Pane resize (klein, 5 Einheiten) |
 | `z` | Zoom toggle |
 | `x` | Pane schließen |
 | `-` | Vertikal splitten |
 | `\|` | Horizontal splitten |
 | `q/Esc` | Mode verlassen |
+
+## Bekannte Einschränkungen
+
+- **Search Mode in Alternate Screen:** Suche funktioniert nicht in Tabs mit Programmen die den Alternate Screen Buffer nutzen (z.B. Claude Code, Neovim). In normalen Shell-Tabs funktioniert die Suche.
+- **Paragraph-Bewegung (`{`/`}`):** WezTerm hat keine native CopyMode-Aktion für Paragraph-Bewegung (Sprung zu leeren Zeilen).
+- **`Leader + ?`:** Zeigt nur Aktionsnamen, nicht die Tastenkombinationen dazu.

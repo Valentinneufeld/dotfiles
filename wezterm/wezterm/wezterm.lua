@@ -11,6 +11,40 @@ end
 
 local font_name = "JetBrainsMono Nerd Font"
 
+-- Tab title with edges
+local SOLID_LEFT = wezterm.nerdfonts.pl_right_hard_divider
+local SOLID_RIGHT = wezterm.nerdfonts.pl_left_hard_divider
+
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+	local bg = "#090909"
+	local fg = "#7a6a5a"
+	local edge_fg = "#1a1410"
+
+	if tab.is_active then
+		bg = "#1a1410"
+		fg = "#d4c4a8"
+		edge_fg = "#1a1410"
+	elseif hover then
+		bg = "#1a1410"
+		fg = "#d4c4a8"
+		edge_fg = "#1a1410"
+	end
+
+	local title = " " .. (tab.tab_index + 1) .. ": " .. tab.active_pane.title .. " "
+
+	return {
+		{ Background = { Color = "#090909" } },
+		{ Foreground = { Color = edge_fg } },
+		{ Text = SOLID_LEFT },
+		{ Background = { Color = bg } },
+		{ Foreground = { Color = fg } },
+		{ Text = title },
+		{ Background = { Color = "#090909" } },
+		{ Foreground = { Color = edge_fg } },
+		{ Text = SOLID_RIGHT },
+	}
+end)
+
 -- Status bar with mode indicator
 wezterm.on("update-status", function(window, pane)
 	local status = ""
@@ -26,8 +60,12 @@ wezterm.on("update-status", function(window, pane)
 		{ Background = { Color = "#c8a656" } },
 		{ Text = status },
 	}))
-	-- Clear right status (removes stuck copy mode indicator)
-	window:set_right_status("")
+	-- Workspace name in right status
+	local workspace = window:active_workspace()
+	window:set_right_status(wezterm.format({
+		{ Foreground = { Color = "#7a6a5a" } },
+		{ Text = " " .. workspace .. " " },
+	}))
 end)
 
 return {
@@ -78,10 +116,11 @@ return {
 		brights = { "#5a4a3a", "#c46a5a", "#8aad6a", "#e0b65e", "#7aa0b4", "#b08a9f", "#7aaa9a", "#e8dcc8" },
 		indexed = { [136] = "#edeff0" },
 		tab_bar = {
-			active_tab = { bg_color = "#2e2418", fg_color = "#d4c4a8", italic = true },
-			inactive_tab = { bg_color = "#1a1410", fg_color = "#7a6a5a" },
-			inactive_tab_hover = { bg_color = "#3a2e22", fg_color = "#d4c4a8" },
-			new_tab = { bg_color = "#2e2418", fg_color = "#d4c4a8" },
+			background = "#090909",
+			active_tab = { bg_color = "#1a1410", fg_color = "#d4c4a8", italic = true },
+			inactive_tab = { bg_color = "#090909", fg_color = "#7a6a5a" },
+			inactive_tab_hover = { bg_color = "#1a1410", fg_color = "#d4c4a8" },
+			new_tab = { bg_color = "#090909", fg_color = "#7a6a5a" },
 			new_tab_hover = { bg_color = "#c8a656", fg_color = "#1a1410" },
 		},
 	},
@@ -93,7 +132,7 @@ return {
 	enable_tab_bar = true,
 	hide_tab_bar_if_only_one_tab = false,
 	show_tab_index_in_tab_bar = false,
-	tab_bar_at_bottom = true, -- Status bar at bottom
+	tab_bar_at_bottom = false,
 
 	-- General window settings
 	automatically_reload_config = true,
@@ -123,7 +162,7 @@ return {
 		{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("Clipboard") },
 
 		-- QuickSelect (vim-easymotion style)
-		{ key = "s", mods = "LEADER", action = wezterm.action.QuickSelect },
+		{ key = "S", mods = "LEADER|SHIFT", action = wezterm.action.QuickSelect },
 
 		-- URL QuickSelect and open
 		{
@@ -198,6 +237,50 @@ return {
 		{ key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
 		{ key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
 
+		-- Move tab to position (tmux-style Leader + .)
+		{
+			key = ".",
+			mods = "LEADER",
+			action = wezterm.action.PromptInputLine({
+				description = "Move tab to position (1 = leftmost)",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line then
+						local index = tonumber(line)
+						if index and index >= 1 then
+							window:perform_action(wezterm.action.MoveTab(index - 1), pane)
+						end
+					end
+				end),
+			}),
+		},
+
+		-- Workspace list (tmux-style Leader + s)
+		{ key = "s", mods = "LEADER", action = wezterm.action.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }) },
+
+		-- Workspace navigation (tmux-style sessions)
+		{ key = "(", mods = "LEADER|SHIFT", action = wezterm.action.SwitchWorkspaceRelative(-1) },
+		{ key = ")", mods = "LEADER|SHIFT", action = wezterm.action.SwitchWorkspaceRelative(1) },
+
+		-- Rename workspace (tmux-style Leader + $)
+		{
+			key = "$",
+			mods = "LEADER|SHIFT",
+			action = wezterm.action.PromptInputLine({
+				description = "Enter new workspace name",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line then
+						window:perform_action(wezterm.action.SwitchToWorkspace({ name = line }), pane)
+					end
+				end),
+			}),
+		},
+
+		-- Fuzzy tab search (tmux-style Leader + f)
+		{ key = "f", mods = "LEADER", action = wezterm.action.ShowLauncherArgs({ flags = "FUZZY|TABS" }) },
+
+		-- Show keybindings (tmux-style Leader + ?)
+		{ key = "?", mods = "LEADER|SHIFT", action = wezterm.action.ShowLauncherArgs({ flags = "FUZZY|KEY_ASSIGNMENTS" }) },
+
 		-- Resize panes like tmux (Shift + Leader + h/j/k/l)
 		{ key = "H", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Left", 35 }) },
 		{ key = "J", mods = "LEADER|SHIFT", action = wezterm.action.AdjustPaneSize({ "Down", 35 }) },
@@ -239,11 +322,26 @@ return {
 			{ key = "V", mods = "SHIFT", action = wezterm.action.CopyMode({ SetSelectionMode = "Line" }) },
 			{ key = "v", mods = "CTRL", action = wezterm.action.CopyMode({ SetSelectionMode = "Block" }) },
 
+			-- Viewport movement (vim H/M/L)
+			{ key = "H", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToViewportTop") },
+			{ key = "M", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToViewportMiddle") },
+			{ key = "L", mods = "SHIFT", action = wezterm.action.CopyMode("MoveToViewportBottom") },
+
+			-- Jump to character (vim f/F/t/T)
+			{ key = "f", action = wezterm.action.CopyMode({ JumpForward = { prev_char = false } }) },
+			{ key = "F", mods = "SHIFT", action = wezterm.action.CopyMode({ JumpBackward = { prev_char = false } }) },
+			{ key = "t", action = wezterm.action.CopyMode({ JumpForward = { prev_char = true } }) },
+			{ key = "T", mods = "SHIFT", action = wezterm.action.CopyMode({ JumpBackward = { prev_char = true } }) },
+			{ key = ";", action = wezterm.action.CopyMode("JumpAgain") },
+			{ key = ",", action = wezterm.action.CopyMode("JumpReverse") },
+
 			-- Semantic zone selection
 			{ key = "z", action = wezterm.action.CopyMode({ SetSelectionMode = "SemanticZone" }) },
 
 			-- Search
 			{ key = "/", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
+			{ key = "7", mods = "SHIFT", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
+			{ key = "s", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
 			{ key = "n", action = wezterm.action.CopyMode("NextMatch") },
 			{ key = "N", mods = "SHIFT", action = wezterm.action.CopyMode("PriorMatch") },
 
@@ -281,6 +379,19 @@ return {
 			{ key = "x", action = wezterm.action.CloseCurrentPane({ confirm = false }) },
 			{ key = "-", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 			{ key = "|", mods = "SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		},
+
+		search_mode = {
+			{ key = "Enter", action = wezterm.action.CopyMode("AcceptPattern") },
+			{ key = "Escape", action = wezterm.action.CopyMode("Close") },
+			{ key = "n", mods = "CTRL", action = wezterm.action.CopyMode("NextMatch") },
+			{ key = "p", mods = "CTRL", action = wezterm.action.CopyMode("PriorMatch") },
+			{ key = "r", mods = "CTRL", action = wezterm.action.CopyMode("CycleMatchType") },
+			{ key = "u", mods = "CTRL", action = wezterm.action.CopyMode("ClearPattern") },
+			{ key = "PageUp", action = wezterm.action.CopyMode("PriorMatchPage") },
+			{ key = "PageDown", action = wezterm.action.CopyMode("NextMatchPage") },
+			{ key = "UpArrow", action = wezterm.action.CopyMode("PriorMatch") },
+			{ key = "DownArrow", action = wezterm.action.CopyMode("NextMatch") },
 		},
 	},
 }
