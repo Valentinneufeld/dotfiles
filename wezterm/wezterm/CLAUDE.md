@@ -54,12 +54,12 @@ Dasselbe Schema ist auch in Neovim (`~/.config/nvim/lua/valentin/plugins/colorsc
 
 ## Status-Leiste
 
-- **Links:** Mode-Indikator (LEADER / COPY_MODE / PANE_MODE etc.) — Gold auf Braun
+- **Links:** Mode-Indikator (LEADER / COPY_MODE / PANE_MODE etc.) — goldene Schrift (`#c8a656`) auf Tab-Bar BG (`#090909`), nur sichtbar wenn aktiv
 - **Rechts:** Aktueller Workspace-Name — gedämpft (`#7a6a5a`)
 
 ## Tab-Styling
 
-Tabs haben Powerline-Pfeile (NerdFont `pl_right_hard_divider` / `pl_left_hard_divider`) als Rahmen. Format: `[Index]: [Pane-Titel]` (1-basiert).
+Tabs haben Powerline-Pfeile (NerdFont `pl_right_hard_divider` / `pl_left_hard_divider`) als Rahmen. Format: `[Index]: [Pane-Titel]` (1-basiert). Manuell gesetzte Tab-Titel (`Leader + ,`) haben Vorrang vor Pane-Titel.
 
 ## Aktuelle Keybindings (tmux-style)
 
@@ -76,7 +76,8 @@ Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 | `Leader + b` | QuickSelect Shell-Befehle (nach `❯`, `$`, `#`) |
 | `Leader + u` | URL auswählen und öffnen |
 | `Leader + s` | Workspace-Liste (fuzzy) |
-| `Leader + $` | Workspace umbenennen/erstellen |
+| `Leader + C` | Neuer Workspace (Name eingeben) |
+| `Leader + $` | Workspace umbenennen |
 | `Leader + (` / `)` | Vorheriger/nächster Workspace |
 | `Leader + .` | Tab verschieben (1-basiert) |
 | `Leader + f` | Tabs fuzzy-suchen |

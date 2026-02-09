@@ -14,7 +14,6 @@ local font_name = "JetBrainsMono Nerd Font"
 -- Tab title with edges
 local SOLID_LEFT = wezterm.nerdfonts.pl_right_hard_divider
 local SOLID_RIGHT = wezterm.nerdfonts.pl_left_hard_divider
-
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 	local bg = "#090909"
 	local fg = "#7a6a5a"
@@ -30,7 +29,11 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		edge_fg = "#1a1410"
 	end
 
-	local title = " " .. (tab.tab_index + 1) .. ": " .. tab.active_pane.title .. " "
+	local tab_title = tab.tab_title
+	if not tab_title or #tab_title == 0 then
+		tab_title = tab.active_pane.title
+	end
+	local title = " " .. (tab.tab_index + 1) .. ": " .. tab_title .. " "
 
 	return {
 		{ Background = { Color = "#090909" } },
@@ -47,20 +50,20 @@ end)
 
 -- Status bar with mode indicator
 wezterm.on("update-status", function(window, pane)
-	local status = ""
+	local mode_text = ""
 
 	if window:leader_is_active() then
-		status = " LEADER "
+		mode_text = " LEADER "
 	elseif window:active_key_table() then
-		status = " " .. window:active_key_table():upper() .. " "
+		mode_text = " " .. window:active_key_table():upper() .. " "
 	end
 
 	window:set_left_status(wezterm.format({
-		{ Foreground = { Color = "#1a1410" } },
-		{ Background = { Color = "#c8a656" } },
-		{ Text = status },
+		{ Background = { Color = "#090909" } },
+		{ Foreground = { Color = "#c8a656" } },
+		{ Text = mode_text },
 	}))
-	-- Workspace name in right status
+
 	local workspace = window:active_workspace()
 	window:set_right_status(wezterm.format({
 		{ Foreground = { Color = "#7a6a5a" } },
@@ -279,15 +282,30 @@ return {
 		{ key = "(", mods = "LEADER|SHIFT", action = wezterm.action.SwitchWorkspaceRelative(-1) },
 		{ key = ")", mods = "LEADER|SHIFT", action = wezterm.action.SwitchWorkspaceRelative(1) },
 
+		-- New workspace (Leader + C)
+		{
+			key = "C",
+			mods = "LEADER|SHIFT",
+			action = wezterm.action.PromptInputLine({
+				description = "Enter name for new workspace",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line and line ~= "" then
+						window:perform_action(wezterm.action.SwitchToWorkspace({ name = line }), pane)
+					end
+				end),
+			}),
+		},
+
 		-- Rename workspace (tmux-style Leader + $)
 		{
 			key = "$",
 			mods = "LEADER|SHIFT",
 			action = wezterm.action.PromptInputLine({
-				description = "Enter new workspace name",
+				description = "Rename workspace",
+				initial_value = "",
 				action = wezterm.action_callback(function(window, pane, line)
-					if line then
-						window:perform_action(wezterm.action.SwitchToWorkspace({ name = line }), pane)
+					if line and line ~= "" then
+						wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line)
 					end
 				end),
 			}),

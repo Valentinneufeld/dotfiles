@@ -32,6 +32,18 @@ Die Statusleiste zeigt den aktiven Modus an: "LEADER", "PANE_MODE", etc.
 
 ---
 
+## Workspace Management
+
+| Keys | Action | tmux Equivalent |
+|------|--------|-----------------|
+| `Leader + C` | Neuer Workspace (Name eingeben) | - |
+| `Leader + s` | Workspace-Liste (fuzzy) | `Ctrl+b s` |
+| `Leader + $` | Workspace umbenennen | `Ctrl+b $` |
+| `Leader + (` | Vorheriger Workspace | `Ctrl+b (` |
+| `Leader + )` | Nächster Workspace | `Ctrl+b )` |
+
+---
+
 ## Tab Management
 
 | Keys | Action | tmux Equivalent |
