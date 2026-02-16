@@ -156,6 +156,13 @@ Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 
 Wenn der User **"session ende"** sagt, erstelle eine Markdown-Datei `SESSION-YYYY-MM-DD.md` (bei mehreren Sessions am selben Tag: `SESSION-YYYY-MM-DD-2.md` etc.) mit allen besprochenen Themen, Entscheidungen und Erkenntnissen der aktuellen Session.
 
+## Offene Entscheidungen
+
+- **Tmux auf Remote-Servern vs. WezTerm Leader-Konflikt:** Beide nutzen `Ctrl+b`. Zwei Optionen stehen zur Wahl:
+  1. **Doppel-Prefix:** `{ key = "b", mods = "LEADER|CTRL", action = wezterm.action.SendKey({ key = "b", mods = "CTRL" }) }` in WezTerm — dann `Ctrl+b, Ctrl+b` leitet an tmux durch (WezTerm-Doku empfiehlt dieses Pattern)
+  2. **Tmux Prefix ändern:** Auf dem Server `~/.tmux.conf` → `set -g prefix C-a` — klare Trennung `Ctrl+b` = WezTerm, `Ctrl+a` = tmux
+  - User hat sich noch nicht entschieden.
+
 ## Bekannte Einschränkungen
 
 - **Search Mode in Alternate Screen:** Suche funktioniert nicht in Tabs mit Programmen die den Alternate Screen Buffer nutzen (z.B. Claude Code, Neovim). In normalen Shell-Tabs funktioniert die Suche.
