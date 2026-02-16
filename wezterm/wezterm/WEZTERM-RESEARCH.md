@@ -157,6 +157,14 @@ mods = "SHIFT"            -- Shift allein
 2. **Escape in Key Tables:** Immer `PopKeyTable` oder `CopyMode("Close")` binden
 3. **Regex-Escaping:** In Lua-Strings müssen Backslashes verdoppelt werden (`\\S+`)
 4. **SemanticZone:** Funktioniert nur wenn Shell semantic zones unterstützt (moderne bash/zsh mit OSC 133)
+5. **Search Pattern bleibt bestehen:** WezTerm behält den Suchbegriff zwischen Copy-Mode/Search-Mode-Sessions. `Multiple` mit `ActivateCopyMode` + `ClearPattern` funktioniert **nicht** zuverlässig. Lösung: `action_callback` mit `window:perform_action` für sequentielle Ausführung:
+   ```lua
+   action = wezterm.action_callback(function(window, pane)
+     window:perform_action(wezterm.action.ActivateCopyMode, pane)
+     window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+   end)
+   ```
+   Betrifft: `Leader + [`, `Leader + /`, `/`/`s`/`Shift+7` im Copy Mode.
 
 ---
 

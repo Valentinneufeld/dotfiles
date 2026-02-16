@@ -138,6 +138,8 @@ Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 
 **Such-Workflow:** `Leader + [` → `s` → Suchbegriff → `Enter` → `n/N` zum Springen → `v` Auswahl → `y` Kopieren
 
+**Hinweis:** Alle Such-Einstiegspunkte (`Leader + [`, `Leader + /`, `/`/`s` im Copy Mode) leeren automatisch den vorherigen Suchbegriff via `action_callback` + `ClearPattern`. `Multiple` funktioniert dafür nicht zuverlässig — `perform_action` in `action_callback` ist nötig.
+
 ### Pane Mode (wiederholbar ohne Leader)
 
 | Tasten | Aktion |
@@ -149,6 +151,10 @@ Leader: `Ctrl+b` (Timeout: 5 Sekunden)
 | `-` | Vertikal splitten |
 | `\|` | Horizontal splitten |
 | `q/Esc` | Mode verlassen |
+
+## Session-Notizen Workflow
+
+Wenn der User **"session ende"** sagt, erstelle eine Markdown-Datei `SESSION-YYYY-MM-DD.md` (bei mehreren Sessions am selben Tag: `SESSION-YYYY-MM-DD-2.md` etc.) mit allen besprochenen Themen, Entscheidungen und Erkenntnissen der aktuellen Session.
 
 ## Bekannte Einschränkungen
 

@@ -161,11 +161,17 @@ return {
 	-- Keybindings
 	keys = {
 		-- Copy Mode (tmux-style)
-		{ key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
+		{ key = "[", mods = "LEADER", action = wezterm.action_callback(function(window, pane)
+			window:perform_action(wezterm.action.ActivateCopyMode, pane)
+			window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+		end) },
 		{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("Clipboard") },
 
 		-- Direct search (skip copy mode)
-		{ key = "/", mods = "LEADER|SHIFT", action = wezterm.action.Search("CurrentSelectionOrEmptyString") },
+		{ key = "/", mods = "LEADER|SHIFT", action = wezterm.action_callback(function(window, pane)
+			window:perform_action(wezterm.action.Search({ CaseInSensitiveString = "" }), pane)
+			window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+		end) },
 
 		-- QuickSelect (vim-easymotion style)
 		{ key = "S", mods = "LEADER|SHIFT", action = wezterm.action.QuickSelect },
@@ -374,10 +380,19 @@ return {
 			-- Semantic zone selection
 			{ key = "z", action = wezterm.action.CopyMode({ SetSelectionMode = "SemanticZone" }) },
 
-			-- Search
-			{ key = "/", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
-			{ key = "7", mods = "SHIFT", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
-			{ key = "s", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
+			-- Search (clear previous pattern on enter)
+			{ key = "/", action = wezterm.action_callback(function(window, pane)
+				window:perform_action(wezterm.action.Search({ CaseInSensitiveString = "" }), pane)
+				window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+			end) },
+			{ key = "7", mods = "SHIFT", action = wezterm.action_callback(function(window, pane)
+				window:perform_action(wezterm.action.Search({ CaseInSensitiveString = "" }), pane)
+				window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+			end) },
+			{ key = "s", action = wezterm.action_callback(function(window, pane)
+				window:perform_action(wezterm.action.Search({ CaseInSensitiveString = "" }), pane)
+				window:perform_action(wezterm.action.CopyMode("ClearPattern"), pane)
+			end) },
 			{ key = "n", action = wezterm.action.CopyMode("NextMatch") },
 			{ key = "N", mods = "SHIFT", action = wezterm.action.CopyMode("PriorMatch") },
 
